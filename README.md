@@ -4,7 +4,7 @@ This is a simple iOS app built using Swift, UIKit, MVVM architecture, Combine, M
 
 Below are some screenshots from the app:
 
-| ![Profile Screen](ScreenShots/1.PNG) | ![Album Details Screen](ScreenShots/2.PNG) | ![Image Viewer](ScreenShots/3.PNG) | ![Search Feature](ScreenShots/4.PNG) | | ![Search Feature](ScreenShots/5.PNG) |
+| ![Profile Screen](ScreenShots/1.png) | ![Album Details Screen](ScreenShots/2.png) | ![Image Viewer](ScreenShots/3.png) | ![Search Feature](ScreenShots/4.png) | | ![Search Feature](ScreenShots/5.png) |
 | ------------------------------------ | ------------------------------------------ | ---------------------------------- | ------------------------------------ | ---------------------------------------|
 | Profile Screen                       | Album Details Screen                       | Image Search Feature               | Image Viewer with Zoom               | Share Image
 
