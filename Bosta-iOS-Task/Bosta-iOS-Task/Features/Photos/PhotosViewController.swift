@@ -14,26 +14,9 @@ class PhotosViewController: UIViewController {
     private var viewModel: PhotosViewModel
     private var cancellables = Set<AnyCancellable>()
     private let searchTextSubject: CurrentValueSubject<String?, Never> = .init(nil)
-
-    private let collectionView: UICollectionView = {
-        let layout = UICollectionViewFlowLayout()
-        let screenWidth = UIScreen.main.bounds.width
-        let spacing: CGFloat = 10
-        let itemsPerRow: CGFloat = 3
-        let totalSpacing = spacing * (itemsPerRow - 1)
-        let itemWidth = (screenWidth - totalSpacing) / itemsPerRow
-        layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
-        layout.minimumLineSpacing = spacing
-        layout.minimumInteritemSpacing = spacing
-        return UICollectionView(frame: .zero, collectionViewLayout: layout)
-    }()
     
-    private let searchBar: UISearchBar = {
-        let searchBar = UISearchBar()
-        searchBar.placeholder = "Search photos by title"
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        return searchBar
-    }()
+    private let photosView = PhotosUIView()
+   
 
     init(albumId: Int) {
         self.viewModel = PhotosViewModel(albumId: albumId)
@@ -44,12 +27,35 @@ class PhotosViewController: UIViewController {
         fatalError("init(coder:) has not been implemented")
     }
     
+    override func loadView() {
+        self.view = photosView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+        setupSearchBarView()
+        setupCollectionView()
         viewModel.loadPhotos()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(false)
+
+        navigationController?.navigationBar.prefersLargeTitles = false
+        navigationItem.largeTitleDisplayMode = .never
+    }
+    
+    private func setupSearchBarView() {
+        photosView.searchBar.delegate = self
+    }
+    private func setupCollectionView() {
+        photosView.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
+        photosView.collectionView.dataSource = self
+    }
+    
+    
 }
 
 //MARK: Search Bar
@@ -64,29 +70,7 @@ extension PhotosViewController: UISearchBarDelegate {
 
 extension PhotosViewController {
     private func setupUI() {
-        
         view.backgroundColor = .white
-        
-        searchBar.delegate = self
-        searchBar.translatesAutoresizingMaskIntoConstraints = false
-        
-        view.addSubview(searchBar)
-
-        collectionView.translatesAutoresizingMaskIntoConstraints = false
-        collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
-        collectionView.dataSource = self
-        view.addSubview(collectionView)
-
-        NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
-            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            
-            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
-            collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
     }
 
 }
@@ -126,7 +110,7 @@ extension PhotosViewController {
         viewModel.$filteredPhotos
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.collectionView.reloadData()
+                self?.photosView.collectionView.reloadData()
             }
             .store(in: &cancellables)
     }

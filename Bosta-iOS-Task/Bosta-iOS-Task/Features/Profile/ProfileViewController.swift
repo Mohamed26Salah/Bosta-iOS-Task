@@ -12,24 +12,30 @@ class ProfileViewController: UIViewController {
     private var viewModel: ProfileViewModel = ProfileViewModel()
     private var cancellables = Set<AnyCancellable>()
 
-    private let tableView = UITableView()
-    private let userName = UILabel()
-    private let userAddress = UILabel()
-
+    private let profileView = ProfileUIView()
     
-//    override func loadView() {
-//        self.view = PorfileUIView
-//    }
-//    
+    override func loadView() {
+        self.view = profileView
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         setupUI()
         setupBindings()
+        setupTableViewDelegates()
         viewModel.loadUserAndAlbums()
     }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
 
-    func inject(viewModel: ProfileViewModel) {
-        self.viewModel = viewModel
+        navigationController?.navigationBar.prefersLargeTitles = true
+        navigationItem.largeTitleDisplayMode = .always 
+    }
+    
+    private func setupTableViewDelegates() {
+        profileView.tableView.dataSource = self
+        profileView.tableView.delegate = self
     }
 
 }
@@ -40,43 +46,6 @@ extension ProfileViewController {
     private func setupUI() {
         self.title = "Profile"
         view.backgroundColor = .white
-
-        // User Label
-        userName.font = UIFont.boldSystemFont(ofSize: 24)
-        userName.textAlignment = .left
-        userName.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(userName)
-
-        
-        // User Label
-        userAddress.font = UIFont.boldSystemFont(ofSize: 16)
-        userAddress.textAlignment = .left
-        userAddress.translatesAutoresizingMaskIntoConstraints = false
-        view.addSubview(userAddress)
-        
-        
-        // TableView
-        tableView.translatesAutoresizingMaskIntoConstraints = false
-        tableView.register(UITableViewCell.self, forCellReuseIdentifier: "AlbumCell")
-        tableView.dataSource = self
-        tableView.delegate = self
-        view.addSubview(tableView)
-
-        // Layout
-        NSLayoutConstraint.activate([
-            userName.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor, constant: 16),
-            userName.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            userName.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-            
-            userAddress.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 16),
-            userAddress.leadingAnchor.constraint(equalTo: view.leadingAnchor, constant: 16),
-            userAddress.trailingAnchor.constraint(equalTo: view.trailingAnchor, constant: -16),
-
-            tableView.topAnchor.constraint(equalTo: userAddress.bottomAnchor, constant: 16),
-            tableView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
-            tableView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
-            tableView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
-        ])
     }
 }
 
@@ -110,22 +79,22 @@ extension ProfileViewController {
     private func setupBindings() {
         viewModel.$user
             .compactMap { $0?.name }
-            .receive(on: DispatchQueue.main)
-            .assign(to: \.text, on: userName)
+            .receive(on: RunLoop.main)
+            .assign(to: \.text, on: profileView.userName)
             .store(in: &cancellables)
 
         viewModel.$user
             .compactMap { $0?.address }
             .map { "\($0.city), \($0.street), \($0.suite)" }
-            .receive(on: DispatchQueue.main)
-            .assign(to: \.text, on: userAddress)
+            .receive(on: RunLoop.main)
+            .assign(to: \.text, on: profileView.userAddress)
             .store(in: &cancellables)
         
         viewModel.$albums
-            .receive(on: DispatchQueue.main)
+            .receive(on: RunLoop.main)
             .sink { [weak self] _ in
                 guard let self = self else {return}
-                self.tableView.reloadData()
+                self.profileView.tableView.reloadData()
             }
             .store(in: &cancellables)
     }
