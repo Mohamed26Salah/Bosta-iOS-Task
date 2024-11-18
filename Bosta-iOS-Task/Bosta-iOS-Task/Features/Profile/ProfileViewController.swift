@@ -92,6 +92,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "AlbumCell", for: indexPath)
         cell.textLabel?.text = viewModel.albums[indexPath.row].title
+        cell.selectionStyle = .none
         return cell
     }
 
@@ -123,7 +124,8 @@ extension ProfileViewController {
         viewModel.$albums
             .receive(on: DispatchQueue.main)
             .sink { [weak self] _ in
-                self?.tableView.reloadData()
+                guard let self = self else {return}
+                self.tableView.reloadData()
             }
             .store(in: &cancellables)
     }

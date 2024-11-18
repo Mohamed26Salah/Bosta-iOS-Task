@@ -37,7 +37,8 @@ extension ProfileViewModel {
                     print("Error fetching user or albums: \(error)")
                 }
             }, receiveValue: { [weak self] albums in
-                self?.albums = albums
+                guard let self = self else {return}
+                self.albums = albums
             })
             .store(in: &cancellables)
     }

@@ -13,23 +13,28 @@ import SDWebImage
 class PhotosViewController: UIViewController {
     private var viewModel: PhotosViewModel
     private var cancellables = Set<AnyCancellable>()
+    private let searchTextSubject: CurrentValueSubject<String?, Never> = .init(nil)
 
     private let collectionView: UICollectionView = {
         let layout = UICollectionViewFlowLayout()
         let screenWidth = UIScreen.main.bounds.width
-        let spacing: CGFloat = 10 // Space between items
-        let itemsPerRow: CGFloat = 3 // Number of items per row
-        let totalSpacing = spacing * (itemsPerRow - 1) // Total spacing between items in a row
-        let itemWidth = (screenWidth - totalSpacing) / itemsPerRow // Calculate item width
-        layout.itemSize = CGSize(width: itemWidth, height: itemWidth) // Make items square
+        let spacing: CGFloat = 10
+        let itemsPerRow: CGFloat = 3
+        let totalSpacing = spacing * (itemsPerRow - 1)
+        let itemWidth = (screenWidth - totalSpacing) / itemsPerRow
+        layout.itemSize = CGSize(width: itemWidth, height: itemWidth)
         layout.minimumLineSpacing = spacing
         layout.minimumInteritemSpacing = spacing
         return UICollectionView(frame: .zero, collectionViewLayout: layout)
     }()
-
-
-
     
+    private let searchBar: UISearchBar = {
+        let searchBar = UISearchBar()
+        searchBar.placeholder = "Search photos by title"
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        return searchBar
+    }()
+
     init(albumId: Int) {
         self.viewModel = PhotosViewModel(albumId: albumId)
         super.init(nibName: nil, bundle: nil)
@@ -45,53 +50,84 @@ class PhotosViewController: UIViewController {
         setupBindings()
         viewModel.loadPhotos()
     }
+}
 
+//MARK: Search Bar
 
+extension PhotosViewController: UISearchBarDelegate {
+    func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+        searchTextSubject.send(searchText)
+    }
+}
+
+//MARK: - SetUp UI -
+
+extension PhotosViewController {
     private func setupUI() {
+        
         view.backgroundColor = .white
+        
+        searchBar.delegate = self
+        searchBar.translatesAutoresizingMaskIntoConstraints = false
+        
+        view.addSubview(searchBar)
+
         collectionView.translatesAutoresizingMaskIntoConstraints = false
         collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
         collectionView.dataSource = self
         view.addSubview(collectionView)
 
         NSLayoutConstraint.activate([
-            collectionView.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.topAnchor.constraint(equalTo: view.safeAreaLayoutGuide.topAnchor),
+            searchBar.leadingAnchor.constraint(equalTo: view.leadingAnchor),
+            searchBar.trailingAnchor.constraint(equalTo: view.trailingAnchor),
+            
+            collectionView.topAnchor.constraint(equalTo: searchBar.bottomAnchor),
             collectionView.leadingAnchor.constraint(equalTo: view.leadingAnchor),
             collectionView.trailingAnchor.constraint(equalTo: view.trailingAnchor),
             collectionView.bottomAnchor.constraint(equalTo: view.bottomAnchor)
         ])
     }
 
-    private func setupBindings() {
-        viewModel.$photos
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] _ in
-                self?.collectionView.reloadData()
-            }
-            .store(in: &cancellables)
-    }
 }
+
+//MARK: - Collection View -
 
 extension PhotosViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return viewModel.photos.count
+        return viewModel.filteredPhotos.count
     }
 
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "PhotoCell", for: indexPath)
-        let photo = viewModel.photos[indexPath.item]
+        let photo = viewModel.filteredPhotos[indexPath.item]
         
-        // Create or reuse an image view
         let imageView = UIImageView()
         imageView.contentMode = .scaleAspectFill
         imageView.clipsToBounds = true
         cell.backgroundView = imageView
         
-        // Use SDWebImage to load image asynchronously
         if let url = URL(string: photo.url) {
             imageView.sd_setImage(with: url, placeholderImage: UIImage(systemName: "photo"))
         }
         
         return cell
+    }
+}
+
+//MARK: - Subscribe To Publishers -
+extension PhotosViewController {
+    private func setupBindings() {
+        searchTextSubject
+            .compactMap({$0})
+            .assign(to: \.searchText, on: viewModel)
+            .store(in: &cancellables)
+        
+        viewModel.$filteredPhotos
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] _ in
+                self?.collectionView.reloadData()
+            }
+            .store(in: &cancellables)
     }
 }
