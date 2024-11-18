@@ -53,6 +53,7 @@ class PhotosViewController: UIViewController {
     private func setupCollectionView() {
         photosView.collectionView.register(UICollectionViewCell.self, forCellWithReuseIdentifier: "PhotoCell")
         photosView.collectionView.dataSource = self
+        photosView.collectionView.delegate = self
     }
     
     
@@ -77,7 +78,7 @@ extension PhotosViewController {
 
 //MARK: - Collection View -
 
-extension PhotosViewController: UICollectionViewDataSource {
+extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDelegate {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         return viewModel.filteredPhotos.count
     }
@@ -96,6 +97,17 @@ extension PhotosViewController: UICollectionViewDataSource {
         }
         
         return cell
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let photo = viewModel.filteredPhotos[indexPath.item]
+        guard let url = URL(string: photo.url) else { return }
+        
+        let imageViewerVC = ImageViewerController(imageUrl: url)
+//        imageViewerVC.modalPresentationStyle = .fullScreen
+//        navigationController?.pushViewController(imageViewerVC, animated: true)
+        navigationController?.pushViewController(imageViewerVC, animated: true)
+
     }
 }
 
