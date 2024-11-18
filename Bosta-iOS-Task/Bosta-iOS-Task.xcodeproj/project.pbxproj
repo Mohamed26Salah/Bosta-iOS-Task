@@ -6,6 +6,14 @@
 	objectVersion = 77;
 	objects = {
 
+/* Begin PBXBuildFile section */
+		ABDDF5BE2CEBB4490086C230 /* CombineMoya in Frameworks */ = {isa = PBXBuildFile; productRef = ABDDF5BD2CEBB4490086C230 /* CombineMoya */; };
+		ABDDF5C02CEBB4490086C230 /* Moya in Frameworks */ = {isa = PBXBuildFile; productRef = ABDDF5BF2CEBB4490086C230 /* Moya */; };
+		ABDDF5C22CEBB4490086C230 /* ReactiveMoya in Frameworks */ = {isa = PBXBuildFile; productRef = ABDDF5C12CEBB4490086C230 /* ReactiveMoya */; };
+		ABDDF5C42CEBB4490086C230 /* RxMoya in Frameworks */ = {isa = PBXBuildFile; productRef = ABDDF5C32CEBB4490086C230 /* RxMoya */; };
+		ABDDF5C72CEBB47C0086C230 /* SDWebImageSwiftUI in Frameworks */ = {isa = PBXBuildFile; productRef = ABDDF5C62CEBB47C0086C230 /* SDWebImageSwiftUI */; };
+/* End PBXBuildFile section */
+
 /* Begin PBXFileReference section */
 		ABDDF5A32CEBB1D20086C230 /* Bosta-iOS-Task.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "Bosta-iOS-Task.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -36,6 +44,11 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				ABDDF5C72CEBB47C0086C230 /* SDWebImageSwiftUI in Frameworks */,
+				ABDDF5C02CEBB4490086C230 /* Moya in Frameworks */,
+				ABDDF5BE2CEBB4490086C230 /* CombineMoya in Frameworks */,
+				ABDDF5C42CEBB4490086C230 /* RxMoya in Frameworks */,
+				ABDDF5C22CEBB4490086C230 /* ReactiveMoya in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -78,6 +91,11 @@
 			);
 			name = "Bosta-iOS-Task";
 			packageProductDependencies = (
+				ABDDF5BD2CEBB4490086C230 /* CombineMoya */,
+				ABDDF5BF2CEBB4490086C230 /* Moya */,
+				ABDDF5C12CEBB4490086C230 /* ReactiveMoya */,
+				ABDDF5C32CEBB4490086C230 /* RxMoya */,
+				ABDDF5C62CEBB47C0086C230 /* SDWebImageSwiftUI */,
 			);
 			productName = "Bosta-iOS-Task";
 			productReference = ABDDF5A32CEBB1D20086C230 /* Bosta-iOS-Task.app */;
@@ -107,6 +125,10 @@
 			);
 			mainGroup = ABDDF59A2CEBB1D20086C230;
 			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				ABDDF5BC2CEBB4490086C230 /* XCRemoteSwiftPackageReference "Moya" */,
+				ABDDF5C52CEBB47C0086C230 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */,
+			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = ABDDF5A42CEBB1D20086C230 /* Products */;
 			projectDirPath = "";
@@ -335,6 +357,53 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		ABDDF5BC2CEBB4490086C230 /* XCRemoteSwiftPackageReference "Moya" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/Moya/Moya";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 15.0.3;
+			};
+		};
+		ABDDF5C52CEBB47C0086C230 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/SDWebImage/SDWebImageSwiftUI";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 3.1.3;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		ABDDF5BD2CEBB4490086C230 /* CombineMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABDDF5BC2CEBB4490086C230 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = CombineMoya;
+		};
+		ABDDF5BF2CEBB4490086C230 /* Moya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABDDF5BC2CEBB4490086C230 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = Moya;
+		};
+		ABDDF5C12CEBB4490086C230 /* ReactiveMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABDDF5BC2CEBB4490086C230 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = ReactiveMoya;
+		};
+		ABDDF5C32CEBB4490086C230 /* RxMoya */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABDDF5BC2CEBB4490086C230 /* XCRemoteSwiftPackageReference "Moya" */;
+			productName = RxMoya;
+		};
+		ABDDF5C62CEBB47C0086C230 /* SDWebImageSwiftUI */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = ABDDF5C52CEBB47C0086C230 /* XCRemoteSwiftPackageReference "SDWebImageSwiftUI" */;
+			productName = SDWebImageSwiftUI;
+		};
+/* End XCSwiftPackageProductDependency section */
 	};
 	rootObject = ABDDF59B2CEBB1D20086C230 /* Project object */;
 }
