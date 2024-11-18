@@ -45,7 +45,7 @@ class ProfileViewController: UIViewController {
 extension ProfileViewController {
     private func setupUI() {
         self.title = "Profile"
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
     }
 }
 

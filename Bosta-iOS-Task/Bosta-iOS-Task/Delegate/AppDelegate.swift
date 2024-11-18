@@ -34,7 +34,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     private func setupGlobalNavigationBarAppearance() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .white
+        appearance.backgroundColor = .systemBackground
         appearance.titleTextAttributes = [
             .font: UIFont.boldSystemFont(ofSize: 32),
             .foregroundColor: UIColor.black

@@ -40,7 +40,7 @@ class PhotosUIView: UIView {
     }
 
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         setupSearchBar()
         setupCollectionView()
     }

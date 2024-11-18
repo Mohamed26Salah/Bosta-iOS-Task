@@ -71,7 +71,7 @@ extension PhotosViewController: UISearchBarDelegate {
 
 extension PhotosViewController {
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
     }
 
 }
@@ -104,8 +104,6 @@ extension PhotosViewController: UICollectionViewDataSource, UICollectionViewDele
         guard let url = URL(string: photo.url) else { return }
         
         let imageViewerVC = ImageViewerController(imageUrl: url)
-//        imageViewerVC.modalPresentationStyle = .fullScreen
-//        navigationController?.pushViewController(imageViewerVC, animated: true)
         navigationController?.pushViewController(imageViewerVC, animated: true)
 
     }

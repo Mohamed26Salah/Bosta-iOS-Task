@@ -43,7 +43,7 @@ final class ProfileUIView: UIView {
     }
 
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         setupUserName()
         setupUserAddress()
         setupTableView()

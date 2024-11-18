@@ -48,7 +48,7 @@ class ImageViewerUIView: UIView {
     }
 
     private func setupUI() {
-        backgroundColor = .white
+        backgroundColor = .systemBackground
         setupMainImagerViewer()
         setupScrollView()
         setupViewInsideScrollView()

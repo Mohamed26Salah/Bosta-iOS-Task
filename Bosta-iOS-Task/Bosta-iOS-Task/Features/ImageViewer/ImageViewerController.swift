@@ -32,7 +32,7 @@ class ImageViewerController: UIViewController {
     }
     
     private func setupUI() {
-        view.backgroundColor = .white
+        view.backgroundColor = .systemBackground
         imageViewer.scrollView.delegate = self
         setupNavigationBar()
     }
