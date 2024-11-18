@@ -18,8 +18,9 @@ class PhotosViewController: UIViewController {
     private let photosView = PhotosUIView()
    
 
-    init(albumId: Int) {
+    init(albumId: Int, albumTitle: String) {
         self.viewModel = PhotosViewModel(albumId: albumId)
+        self.photosView.albumTitle.text = albumTitle
         super.init(nibName: nil, bundle: nil)
     }
     

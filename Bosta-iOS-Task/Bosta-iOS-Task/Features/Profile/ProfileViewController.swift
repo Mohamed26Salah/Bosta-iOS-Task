@@ -67,7 +67,7 @@ extension ProfileViewController: UITableViewDataSource, UITableViewDelegate {
 
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let selectedAlbum = viewModel.albums[indexPath.row]
-        let photosVC = PhotosViewController(albumId: selectedAlbum.id)
+        let photosVC = PhotosViewController(albumId: selectedAlbum.id, albumTitle: selectedAlbum.title)
         navigationController?.pushViewController(photosVC, animated: true)
     }
 }

@@ -9,9 +9,18 @@ import UIKit
 import SwiftUI
 
 class PhotosUIView: UIView {
+    
+    let albumTitle: UILabel = {
+        let label = UILabel()
+        label.font = UIFont.boldSystemFont(ofSize: 24)
+        label.textAlignment = .left
+        label.translatesAutoresizingMaskIntoConstraints = false
+        return label
+    }()
+    
     let searchBar: UISearchBar = {
         let searchBar = UISearchBar()
-        searchBar.placeholder = "Search photos by title"
+        searchBar.placeholder = "Search in images.."
         searchBar.translatesAutoresizingMaskIntoConstraints = false
         return searchBar
     }()
@@ -41,14 +50,24 @@ class PhotosUIView: UIView {
 
     private func setupUI() {
         backgroundColor = .systemBackground
+        setupAlbumTitle()
         setupSearchBar()
         setupCollectionView()
+    }
+    
+    func setupAlbumTitle() {
+        addSubview(albumTitle)
+        NSLayoutConstraint.activate([
+            albumTitle.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
+            albumTitle.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
+            albumTitle.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+        ])
     }
     
     func setupSearchBar() {
         addSubview(searchBar)
         NSLayoutConstraint.activate([
-            searchBar.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor),
+            searchBar.topAnchor.constraint(equalTo: albumTitle.bottomAnchor),
             searchBar.leadingAnchor.constraint(equalTo: leadingAnchor),
             searchBar.trailingAnchor.constraint(equalTo: trailingAnchor),
         ])
