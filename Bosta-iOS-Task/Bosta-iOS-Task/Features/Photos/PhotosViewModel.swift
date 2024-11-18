@@ -11,7 +11,8 @@ class PhotosViewModel: ObservableObject {
     @Published var photos: [Photo] = []
     @Published var searchText: String = ""
     @Published private(set) var filteredPhotos: [Photo] = []
-    
+    @Published var error: String = ""
+    @Published var showError: Bool = false
     
     private let albumId: Int
     private let service: JSONPlaceholderServiceProtocol
@@ -31,9 +32,11 @@ extension PhotosViewModel {
     func loadPhotos() {
         service.fetchPhotos(for: albumId)
             .receive(on: RunLoop.main)
-            .sink(receiveCompletion: { completion in
+            .sink(receiveCompletion: { [weak self] completion in
                 if case let .failure(error) = completion {
                     print("Error fetching photos: \(error)")
+                    self?.error = "Error fetching photos"
+                    self?.showError = true
                 }
             }, receiveValue: { [weak self] photos in
                 guard let self = self else {return}

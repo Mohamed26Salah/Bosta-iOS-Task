@@ -125,5 +125,15 @@ extension PhotosViewController {
                 self?.photosView.collectionView.reloadData()
             }
             .store(in: &cancellables)
+        
+        viewModel.$showError
+            .receive(on: RunLoop.main)
+            .filter { $0 }
+            .sink { [weak self] _ in
+                guard let self = self else {return}
+                self.show(messageAlert: viewModel.error)
+                self.viewModel.showError = false
+            }
+            .store(in: &cancellables)
     }
 }
