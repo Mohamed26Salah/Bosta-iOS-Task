@@ -44,20 +44,32 @@ final class ProfileUIView: UIView {
 
     private func setupUI() {
         backgroundColor = .white
-
+        setupUserName()
+        setupUserAddress()
+        setupTableView()
+    }
+    
+    func setupUserName() {
         addSubview(userName)
-        addSubview(userAddress)
-        addSubview(tableView)
-
         NSLayoutConstraint.activate([
             userName.topAnchor.constraint(equalTo: safeAreaLayoutGuide.topAnchor, constant: 16),
             userName.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            userName.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-            
+            userName.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+        ])
+    }
+    
+    func setupUserAddress() {
+        addSubview(userAddress)
+        NSLayoutConstraint.activate([
             userAddress.topAnchor.constraint(equalTo: userName.bottomAnchor, constant: 16),
             userAddress.leadingAnchor.constraint(equalTo: leadingAnchor, constant: 16),
-            userAddress.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16),
-
+            userAddress.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16)
+        ])
+    }
+    
+    func setupTableView() {
+        addSubview(tableView)
+        NSLayoutConstraint.activate([
             tableView.topAnchor.constraint(equalTo: userAddress.bottomAnchor, constant: 16),
             tableView.leadingAnchor.constraint(equalTo: leadingAnchor),
             tableView.trailingAnchor.constraint(equalTo: trailingAnchor),
